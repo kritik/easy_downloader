@@ -19,12 +19,12 @@ Then, in your application:
       :type           => :ftp,
       :host           => '127.0.0.1',
       :user           => 'app',
-      :password       => 'example'
-      :remote_path    => '/some/directory/IWantToChangeTo'
-      :remote_pattern => '.*\.txt'
+      :password       => 'example', # not require parameter
+      :remote_path    => '/some/directory/IWantToChangeTo',
+      :remote_pattern => '.*\.txt', # not require parameter
       :local_path     => Rails.root+'/my_downloaded_stuff/'
       )
-
+      
   my_results.results
     => "We found 1 file(s) to download with the following names:
         #1. test_file.txt
@@ -37,6 +37,10 @@ Then, in your application:
 
   my_results.files
     => ['test_file.txt']
+    
+Additional parameters which can be used in the FTP are:
+  * last_file - String, not required
+  * redownload_last - Boolean if set to true, then download will start from current file. Not required
 
 The returned object only has two attributes (did I mention this was dead simple):
  1. result

@@ -3,10 +3,11 @@ module EasyDownloader
   module Ftp
     def ftp_download(options)
       open_ftp do |ftp|
-
         change_remote_dir(ftp)
-
-        files = ftp.nlst.select {|file_name| options.remote_pattern == '*' || file_name =~ Regexp.new(options.remote_pattern) }
+        
+        files = ftp.nlst
+        files = files.select {|file_name| options.remote_pattern == '*' || file_name =~ Regexp.new(options.remote_pattern) } if options.remote_pattern
+        files = files[right_last_file(options)..-1] if options.last_file
         total = files.size
         options.result.found(files.size, files)
 
@@ -71,6 +72,12 @@ module EasyDownloader
       else
         Dir[options.remote_path, options.remote_pattern]
       end
+    end
+    
+    
+    def right_last_file options
+      plus_one = (options.redownload_last ? 0 : 1)
+      files.index(options.last_file) + plus_one
     end
   end
 end

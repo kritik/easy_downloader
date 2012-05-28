@@ -5,7 +5,7 @@ module EasyDownloader
                   :host, :user, :password,
                   :local_path, :remote_path,
                   :local_pattern, :remote_pattern,
-                  :local_file, :remote_file
+                  :local_file, :remote_file, :last_file, :redownload_last
 
     def initialize(*options)
       @files = []
@@ -13,6 +13,7 @@ module EasyDownloader
       @result          = Result.new
       @load_count = 0
       @options = options
+      @options_back = options.dup
 
       options.extract_options!.each do |key, value|
         send("#{key}=".to_sym, value) if respond_to?("#{key}=".to_sym)
@@ -33,6 +34,13 @@ module EasyDownloader
       else
         ''
       end
+    end
+    
+    def inspect
+      @options_back.extract_options!
+    end
+    def to_s
+      inspect.to_s
     end
   end
 end
