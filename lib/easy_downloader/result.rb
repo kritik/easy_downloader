@@ -63,7 +63,7 @@ module EasyDownloader
 
     def found_list
       full_list = ''
-      @found_list.each_with_index do |file_name, index|
+      @found_list.to_a.each_with_index do |file_name, index|
         full_list += "##{(index+1).to_s}. #{file_name} "
       end
       full_list
