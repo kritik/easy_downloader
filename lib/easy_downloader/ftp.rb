@@ -7,7 +7,7 @@ module EasyDownloader
         
         files = ftp.nlst
         files = files.select {|file_name| options.remote_pattern == '*' || file_name =~ Regexp.new(options.remote_pattern) } if options.remote_pattern
-        files = files[right_last_file(options)..-1] if options.last_file
+        files = files[right_last_file(files, options)..-1] if options.last_file
         total = files.size
         options.result.found(files.size, files)
 
@@ -75,7 +75,7 @@ module EasyDownloader
     end
     
     
-    def right_last_file options
+    def right_last_file files, options
       plus_one = (options.redownload_last ? 0 : 1)
       files.index(options.last_file) + plus_one
     end
