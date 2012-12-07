@@ -4,8 +4,13 @@ module EasyDownloader
     def ftp_download(options)
       open_ftp do |ftp|
         change_remote_dir(ftp)
-        
-        files = ftp.nlst
+        #fix if nlist not working
+        begin
+	  files = ftp.nlst
+        rescue Exception => e
+	  puts "Nlist not working on current ftp #{e}"
+	  files = ftp.ls.map{|line| line.split(' ').last }
+	end
         files = files.select {|file_name| options.remote_pattern == '*' || file_name =~ Regexp.new(options.remote_pattern) } if options.remote_pattern
         files = files[right_last_file(files, options)..-1] if options.last_file
         total = files.size
@@ -48,6 +53,7 @@ module EasyDownloader
       Net::FTP.open(options.host,
                     options.user,
                     ftp_password_option(options.password)) do |ftp|
+	ftp.passive = true
         yield(ftp)
       end
     end
@@ -77,7 +83,7 @@ module EasyDownloader
     
     def right_last_file files, options
       plus_one = (options.redownload_last ? 0 : 1)
-      files.index(options.last_file) + plus_one
+      files.index(options.last_file).to_i + plus_one
     end
   end
 end

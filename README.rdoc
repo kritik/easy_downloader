@@ -22,6 +22,7 @@ Then, in your application:
       :password       => 'example', # not require parameter
       :remote_path    => '/some/directory/IWantToChangeTo',
       :remote_pattern => '.*\.txt', # not require parameter
+      :redownload_last=> false, # Not necessary unless true
       :local_path     => Rails.root+'/my_downloaded_stuff/'
       )
       
